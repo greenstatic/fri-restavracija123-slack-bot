@@ -12,6 +12,7 @@ VERSION_PATCH:=$(shell cat main.go | awk '/versionPatch = / {print $$3}')
 VERSION:=$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 LFLAGS=-ldflags "-X main.buildDate=${BUILD_DATE} -X main.commit=${COMMIT}"
 
+#DOCKER_IMAGE=docker.pkg.github.com/greenstatic/fri-restavracija123-slack-bot/bot
 DOCKER_IMAGE=greenstatic/fri-restavracija123-slack-bot
 
 .PHONY: fmt
