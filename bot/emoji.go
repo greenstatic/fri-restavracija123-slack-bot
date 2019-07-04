@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+const (
+	veganEmoji      = ":seedling:"
+	vegetarianEmoji = ":green_salad:"
+)
+
 var foodEmojis = []string{":baby_bottle:",
 	":beer:",
 	":beers:",

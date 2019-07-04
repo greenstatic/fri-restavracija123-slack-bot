@@ -11,7 +11,7 @@ import (
 type Bot struct {
 	config slack.Config
 
-	// When we cause the bot to send the message +/- 1 minute
+	// When we cause the bot to send the message with an up to 1 minute delay
 	dailyTrigger time.Time
 	lastRun      time.Time
 }
@@ -76,6 +76,11 @@ func (b Bot) run() error {
 	foods, err := restavracija123.DailyMenu(time.Now())
 	if err != nil {
 		return stacktrace.Propagate(err, "Cannot run bot due to data source API failure")
+	}
+
+	if len(foods) == 0 {
+		logrus.Info("No foods on the menu today, not sending any message.")
+		return nil
 	}
 
 	msg := MenuMarkdownContent(foods)

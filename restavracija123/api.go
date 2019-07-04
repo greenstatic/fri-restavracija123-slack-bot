@@ -42,6 +42,12 @@ func DailyMenu(t time.Time) ([]MenuItem, error) {
 
 	menuResp := DailyMenuJsonResponse{}
 	if err := json.Unmarshal(raw, &menuResp); err != nil {
+
+		// Check if empty list
+		if string(raw) == "[]" {
+			return []MenuItem{}, nil
+		}
+
 		return []MenuItem{}, stacktrace.Propagate(err, "Failed to parse JSON")
 	}
 
@@ -60,4 +66,13 @@ func MenuItemsFromApiResponse(d DailyMenuJsonResponse) []MenuItem {
 	}
 
 	return menuItems
+}
+
+func (m MenuItem) MenuTypeIds() []string {
+	xs := make([]string, 0, len(m.MenuType))
+	for _, e := range m.MenuType {
+		xs = append(xs, e.TypeId)
+	}
+
+	return xs
 }

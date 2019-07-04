@@ -12,7 +12,14 @@ func MenuMarkdownContent(m []restavracija123.MenuItem) string {
 	menuItems := make([]string, 0, len(m))
 
 	for _, e := range m {
-		menuItems = append(menuItems, RemoveAsterisks(e.Title))
+
+		t := RemoveAsterisks(e.Title)
+		emoji := FoodEmoji(e)
+		if emoji != "" {
+			t += " " + emoji
+		}
+
+		menuItems = append(menuItems, t)
 	}
 
 	s.WriteString(MarkdownList(menuItems))
@@ -38,4 +45,32 @@ func MarkdownList(xs []string) string {
 	}
 
 	return s.String()
+}
+
+const (
+	veganId      = "13186"
+	vegetarianId = "3725"
+)
+
+func FoodEmoji(food restavracija123.MenuItem) string {
+	typeIds := food.MenuTypeIds()
+	if StringContains(typeIds, veganId) {
+		return veganEmoji
+	}
+
+	if StringContains(typeIds, vegetarianId) {
+		return vegetarianEmoji
+	}
+
+	return ""
+}
+
+func StringContains(xs []string, s string) bool {
+	for _, e := range xs {
+		if e == s {
+			return true
+		}
+	}
+
+	return false
 }
