@@ -5,7 +5,7 @@ Data is extracted from: [www.restavracija123.si/](https://www.restavracija123.si
 
 ## Environment variables
 * `SLACK_WEBHOOK` (required) - Slack Webhook URL
-* `MESSAGE_TRIGGER` (required) - HH:MM in UTC (e.g. "10:00")
+* `MESSAGE_TRIGGER` (required) - HH:MM in UTC (e.g. "10:30")
 * `DEBUG` - true/false
 
 ## Dev
@@ -15,3 +15,6 @@ To build docker image
 ```bash
 make docker
 ```
+
+### Insider Knowledge
+The FRI cafeteria finalizes the menu by 10:30 (local time).
