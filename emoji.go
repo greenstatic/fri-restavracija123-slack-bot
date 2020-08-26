@@ -1,4 +1,4 @@
-package bot
+package main
 
 import (
 	"math/rand"
@@ -8,6 +8,7 @@ import (
 const (
 	veganEmoji      = ":seedling:"
 	vegetarianEmoji = ":green_salad:"
+	fishEmoji       = ":fish:"
 )
 
 var foodEmojis = []string{":baby_bottle:",

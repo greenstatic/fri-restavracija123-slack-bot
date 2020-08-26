@@ -1,19 +1,19 @@
-package bot
+package main
 
 import (
-	"github.com/greenstatic/fri-restavracija123-slack-bot/restavracija123"
+	"fmt"
 	"strings"
 )
 
-func MenuMarkdownContent(m []restavracija123.MenuItem) string {
+func MenuMarkdownContent(c Cafeteria, m Menu) string {
 	s := strings.Builder{}
-	s.WriteString(randomEmoji() + " Dnevni meni\n")
+	s.WriteString(MarkdownBold(fmt.Sprintf("%s dnevni meni:", c.Name())))
+	s.WriteString("\n")
 
 	menuItems := make([]string, 0, len(m))
 
 	for _, e := range m {
-
-		t := RemoveAsterisks(e.Title)
+		t := RemoveAsterisks(e.Name)
 		emoji := FoodEmoji(e)
 		if emoji != "" {
 			t += " " + emoji
@@ -47,19 +47,21 @@ func MarkdownList(xs []string) string {
 	return s.String()
 }
 
-const (
-	veganId      = "13186"
-	vegetarianId = "3725"
-)
+func MarkdownBold(s string) string {
+	return fmt.Sprintf("*%s*", s)
+}
 
-func FoodEmoji(food restavracija123.MenuItem) string {
-	typeIds := food.MenuTypeIds()
-	if StringContains(typeIds, veganId) {
+func FoodEmoji(item MenuItem) string {
+	if item.IsVegan {
 		return veganEmoji
 	}
 
-	if StringContains(typeIds, vegetarianId) {
+	if item.IsVegetarian {
 		return vegetarianEmoji
+	}
+
+	if item.IsFish {
+		return fishEmoji
 	}
 
 	return ""

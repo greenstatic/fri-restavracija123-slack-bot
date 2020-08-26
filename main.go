@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/greenstatic/fri-restavracija123-slack-bot/bot"
-	"github.com/greenstatic/fri-restavracija123-slack-bot/slack"
 	"github.com/sirupsen/logrus"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -24,16 +24,31 @@ var (
 )
 
 func main() {
-	logrus.Info("Starting FRI Restavracija123 Slack Bot, version:", version())
+	logrus.Info("Starting Slack Food Bot, version:", version())
 	c := readConfig()
 	checkRequiredConfig(c)
 	checkDebug(c)
 
-	slackC := slack.Config{c.slackWebhook}
+	slackC := Config{c.slackWebhook}
 
-	b := bot.New(slackC, c.messageTrigger)
+	fri := Fri{}
+	friBot := NewBot(slackC, &fri, c.messageTrigger)
 
-	b.Start()
+	bf := Bf{}
+	bfBot := NewBot(slackC, &bf, c.messageTrigger)
+
+	go func() {
+		friBot.Start()
+	}()
+
+	go func() {
+		bfBot.Start()
+	}()
+
+	// Exit when receive SIGINT or SIGTERM signal
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	<-sigs
 }
 
 type config struct {
